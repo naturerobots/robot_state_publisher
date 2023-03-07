@@ -51,11 +51,14 @@ int main(int argc, char** argv)
 {
   // Initialize ros
   ros::init(argc, argv, "robot_state_publisher");
-  ros::NodeHandle node;
+  ros::NodeHandle private_nh("~");
+
+  std::string urdf_description_param;
+  private_nh.param<std::string>("urdf_description_param", urdf_description_param, "robot_description");
 
   // gets the location of the robot description on the parameter server
   urdf::Model model;
-  if (!model.initParam("robot_description"))
+  if (!model.initParam(urdf_description_param))
     return 1;
 
   KDL::Tree tree;
